@@ -1,0 +1,60 @@
+# Node modules
+
+/node_modules/
+
+# Build výstupy Vite
+
+/dist/
+
+# Electron build složky (pokud používáš electron-builder nebo electron-forge)
+
+/dist_electron/
+/out/
+/release/
+
+# Environment soubory
+
+.env
+.env.local
+.env.*.local
+
+# Logs
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# MacOS soubory
+
+.DS_Store
+
+# Windows soubory
+
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# VSCode soubory
+
+.vscode/
+
+# Test coverage
+
+/coverage/
+
+# Electron specifické
+
+*.asar
+*.asar.unpack
+*.map
+
+# TypeScript cache
+
+*.tsbuildinfo
+
+# Misc
+
+*.log
+.idea/
+.vite/

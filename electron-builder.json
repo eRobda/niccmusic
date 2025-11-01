@@ -1,0 +1,21 @@
+{
+  "appId": "com.dedahudba.app",
+  "productName": "Děda Hudba",
+  "directories": {
+    "output": "dist"
+  },
+  "files": [
+    "dist-electron/**/*",
+    "dist/**/*",
+    "node_modules/**/*"
+  ],
+  "mac": {
+    "category": "public.app-category.music"
+  },
+  "win": {
+    "target": "nsis"
+  },
+  "linux": {
+    "target": "AppImage"
+  }
+}
