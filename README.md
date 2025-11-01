@@ -50,7 +50,8 @@ Moderní desktopová aplikace pro vyhledávání a stahování hudby ve vysoké 
 
 ## 🖼️ Screenshoty
 
-_Aplikace vypadá skvěle! Přidejte screenshoty zde._
+<img width="1186" height="793" alt="image" src="https://github.com/user-attachments/assets/aa751ba0-b664-475f-a971-37bc5da784eb" />
+<img width="1186" height="793" alt="image" src="https://github.com/user-attachments/assets/d3801e69-2c7d-4d17-a430-ae344902bc41" />
 
 ## 📦 Instalace
 
