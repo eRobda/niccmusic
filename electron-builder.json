@@ -9,6 +9,11 @@
     "dist/**/*",
     "node_modules/**/*"
   ],
+  "publish": {
+    "provider": "github",
+    "owner": "eRobda",
+    "repo": "niccmusic"
+  },
   "mac": {
     "category": "public.app-category.music"
   },

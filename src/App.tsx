@@ -7,6 +7,8 @@ import { ArtistDetail } from '@/components/ArtistDetail'
 import { Settings } from '@/components/Settings'
 import { DownloadQueue, DownloadItem } from '@/components/DownloadQueue'
 import { Player } from '@/components/Player'
+import { UpdateToast } from '@/components/UpdateToast'
+import { UpdateModal } from '@/components/UpdateModal'
 import { usePlayer } from '@/hooks/usePlayer'
 import { searchTracks, searchAlbums, searchArtists, getTrackDetail, getBestQuality } from '@/lib/api'
 import { Track, Album, Artist } from '@/lib/api'
@@ -44,6 +46,11 @@ function App() {
   const [isSettingsClosing, setIsSettingsClosing] = useState(false)
   const [toasts, setToasts] = useState<Array<{ id: string; message: string }>>([])
   const [searchCache, setSearchCache] = useState<Record<string, { tracks?: Track[]; albums?: Album[]; artists?: Artist[] }>>({})
+  
+  // Update management
+  const [updateInfo, setUpdateInfo] = useState<{ version: string; releaseDate: string; releaseNotes: string } | null>(null)
+  const [showUpdateToast, setShowUpdateToast] = useState(false)
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false)
 
   const showToast = (message: string) => {
     const id = `${Date.now()}-${Math.random().toString(36).slice(2)}`
@@ -95,6 +102,31 @@ function App() {
 
     return () => {
       window.electronAPI.removeDownloadProgressListener()
+    }
+  }, [])
+
+  // Set up update listeners
+  useEffect(() => {
+    const handleUpdateAvailable = (info: { version: string; releaseDate: string; releaseNotes: string }) => {
+      setUpdateInfo(info)
+      setShowUpdateToast(true)
+    }
+
+    const handleUpdateNotAvailable = () => {
+      // No update available, do nothing
+    }
+
+    const handleUpdateError = (error: { message: string }) => {
+      console.error('Update error:', error.message)
+      // Optionally show error to user
+    }
+
+    window.electronAPI.onUpdateAvailable(handleUpdateAvailable)
+    window.electronAPI.onUpdateNotAvailable(handleUpdateNotAvailable)
+    window.electronAPI.onUpdateError(handleUpdateError)
+
+    return () => {
+      window.electronAPI.removeUpdateListeners()
     }
   }, [])
 
@@ -582,6 +614,25 @@ function App() {
             ))}
           </div>
         )}
+
+        {/* Update Toast */}
+        {showUpdateToast && updateInfo && (
+          <UpdateToast
+            version={updateInfo.version}
+            onClose={() => setShowUpdateToast(false)}
+            onOpenModal={() => {
+              setIsUpdateModalOpen(true)
+              setShowUpdateToast(false)
+            }}
+          />
+        )}
+
+        {/* Update Modal */}
+        <UpdateModal
+          open={isUpdateModalOpen}
+          onOpenChange={setIsUpdateModalOpen}
+          updateInfo={updateInfo}
+        />
       </div>
     </div>
   )
