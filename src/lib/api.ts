@@ -158,3 +158,17 @@ export const getBestQuality = (audioQuality: string, tags: string[]): string => 
   if (audioQuality === 'HIGH') return 'HIGH'
   return 'NORMAL'
 }
+
+// GitHub Releases API
+export interface GitHubRelease {
+  tag_name: string
+  name: string
+  body: string
+  published_at: string
+  html_url: string
+}
+
+export const getLatestRelease = async (owner: string, repo: string): Promise<GitHubRelease> => {
+  const response = await axios.get(`https://api.github.com/repos/${owner}/${repo}/releases/latest`)
+  return response.data
+}

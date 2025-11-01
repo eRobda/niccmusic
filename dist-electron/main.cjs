@@ -5,6 +5,7 @@ const https = require('https');
 const http = require('http');
 const ffmpeg = require('fluent-ffmpeg');
 const ffmpegStatic = require('ffmpeg-static');
+const { autoUpdater } = require('electron-updater');
 const isDev = process.env.IS_DEV === 'true';
 // Set app name
 app.setName('NICCMUSIC');
@@ -38,7 +39,13 @@ function createWindow() {
         app.quit();
     });
 }
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+    createWindow();
+    // Check for updates on startup (only in production)
+    if (!isDev) {
+        checkForUpdates();
+    }
+});
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         app.quit();
@@ -367,4 +374,96 @@ ipcMain.handle('set-download-format', (_event, format) => {
     const settings = loadSettings();
     settings.downloadFormat = format;
     return saveSettings(settings);
+});
+// Auto-updater configuration and handlers
+let updateInfo = null;
+// Configure autoUpdater
+// Note: autoUpdater defaults to manual download and install
+// We control download/install through IPC handlers
+// Update event handlers
+autoUpdater.on('checking-for-update', () => {
+    console.log('Checking for update...');
+});
+autoUpdater.on('update-available', (info) => {
+    console.log('Update available:', info.version);
+    updateInfo = {
+        version: info.version,
+        releaseDate: info.releaseDate,
+        releaseNotes: info.releaseNotes || '',
+    };
+    if (mainWindow) {
+        mainWindow.webContents.send('update-available', updateInfo);
+    }
+});
+autoUpdater.on('update-not-available', () => {
+    console.log('Update not available');
+    if (mainWindow) {
+        mainWindow.webContents.send('update-not-available');
+    }
+});
+autoUpdater.on('error', (err) => {
+    console.error('Error in auto-updater:', err);
+    if (mainWindow) {
+        mainWindow.webContents.send('update-error', {
+            message: err.message || 'Neznámá chyba při kontrole aktualizací',
+        });
+    }
+});
+autoUpdater.on('download-progress', (progressObj) => {
+    if (mainWindow) {
+        mainWindow.webContents.send('update-download-progress', {
+            percent: Math.round(progressObj.percent),
+            transferred: progressObj.transferred,
+            total: progressObj.total,
+        });
+    }
+});
+autoUpdater.on('update-downloaded', (info) => {
+    console.log('Update downloaded:', info.version);
+    if (mainWindow) {
+        mainWindow.webContents.send('update-downloaded', {
+            version: info.version,
+        });
+    }
+});
+// Function to check for updates
+function checkForUpdates() {
+    if (isDev) {
+        console.log('Skipping update check in development mode');
+        return;
+    }
+    try {
+        autoUpdater.checkForUpdates();
+    }
+    catch (error) {
+        console.error('Failed to check for updates:', error);
+    }
+}
+// IPC handlers for update management
+ipcMain.handle('check-for-updates', () => {
+    checkForUpdates();
+    return { success: true };
+});
+ipcMain.handle('get-update-info', () => {
+    return updateInfo;
+});
+ipcMain.handle('download-update', async () => {
+    try {
+        await autoUpdater.downloadUpdate();
+        return { success: true };
+    }
+    catch (error) {
+        console.error('Failed to download update:', error);
+        return { success: false, error: error instanceof Error ? error.message : String(error) };
+    }
+});
+ipcMain.handle('install-update', () => {
+    try {
+        autoUpdater.quitAndInstall(false, true);
+        return { success: true };
+    }
+    catch (error) {
+        console.error('Failed to install update:', error);
+        return { success: false, error: error instanceof Error ? error.message : String(error) };
+    }
 });

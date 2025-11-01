@@ -1,6 +1,6 @@
 {
   "name": "deda-hudba",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Music downloader app for grandpa",
   "main": "dist-electron/main.cjs",
   "type": "module",
@@ -27,6 +27,7 @@
     "cross-env": "^7.0.3",
     "electron": "^28.1.0",
     "electron-builder": "^24.9.1",
+    "electron-updater": "^6.1.7",
     "eslint": "^8.55.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
@@ -69,6 +70,11 @@
       "dist/**/*",
       "node_modules/**/*"
     ],
+    "publish": {
+      "provider": "github",
+      "owner": "eRobda",
+      "repo": "niccmusic"
+    },
     "mac": {
       "category": "public.app-category.music"
     },

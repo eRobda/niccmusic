@@ -12,6 +12,7 @@ Moderní desktopová aplikace pro vyhledávání a stahování hudby ve vysoké 
 - [Technologie](#technologie)
 - [Stavba aplikace](#stavba-aplikace)
 - [Struktura projektu](#struktura-projektu)
+- [Aktualizace](#aktualizace)
 - [Vývoj](#vývoj)
 
 ## 🎯 Představení
@@ -47,6 +48,12 @@ Moderní desktopová aplikace pro vyhledávání a stahování hudby ve vysoké 
 - **Český jazyk**: Kompletní lokalizace do češtiny
 - **Responzivní layout**: Adaptivní rozhraní pro různé velikosti oken
 - **Animace**: Plynulé přechody a animace pro lepší uživatelský zážitek
+
+### 🔄 Automatické aktualizace
+- **Automatická kontrola**: Aplikace automaticky kontroluje dostupné aktualizace při spuštění
+- **Toast notifikace**: Uživatelsky přívětivé upozornění na dostupné aktualizace
+- **Changelog**: Zobrazení detailních informací o změnách z GitHub Releases
+- **Snadná instalace**: Stahování a instalace aktualizací přímo z aplikace
 
 ## 🖼️ Screenshoty
 
@@ -201,6 +208,21 @@ niccmusic/
 ├── tailwind.config.js
 └── tsconfig.json
 ```
+
+## 🔄 Aktualizace
+
+Aplikace podporuje automatické aktualizace z GitHub Releases. Při každém spuštění se automaticky zkontroluje dostupnost nové verze.
+
+**Pro vývojáře**: Kompletní průvodce, jak publikovat nové aktualizace, najdete v souboru [UPDATES.md](./UPDATES.md).
+
+**Rychlý návod:**
+1. Aktualizujte verzi v `package.json`
+2. Sestavte aplikaci (`npm run build:win` / `build:mac` / `build:linux`)
+3. Vytvořte GitHub Release s tagem ve formátu `v1.1.0`
+4. Přidejte sestavené binární soubory k release
+5. Aplikace automaticky zkontroluje aktualizace při dalším spuštění
+
+Více informací najdete v [UPDATES.md](./UPDATES.md).
 
 ## 👨‍💻 Vývoj
 
