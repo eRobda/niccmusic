@@ -272,7 +272,7 @@ export function Settings({ onBack, isClosing = false }: SettingsProps) {
             </div>
             <div>
               <h4 className="font-semibold">Verze</h4>
-              <p className="text-muted-foreground">1.0.0</p>
+              <p className="text-muted-foreground">1.1.0</p>
             </div>
           </div>
         </CardContent>
